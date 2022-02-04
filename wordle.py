@@ -7,22 +7,32 @@ import os
 class Wordle:
     """
     A class to cheat at wordle...
+    We use the 5 letters word list of D. Knuth that can be obtained from his webpage:
+    https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt
 
+    The sgb-words.txt file is expected in the data/ directory
     """
     def __init__(self):
+        # Read the 5 letters word list
         basedir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                'data/')
         wordfile = os.path.join(basedir, 'sgb-words.txt')
         if not os.path.exists(wordfile):
-            raise IOError('Dictionary file sgb-words.txt not found')
+            raise IOError('Dictionary file sgb-words.txt not found in data/')
         with open(wordfile, 'r') as f:
             self.words = np.array(f.read().splitlines())
+        # frequencies of letters
         self.freq = collections.Counter()
+        # list of absent letters
         self.absent = []
+        # list of correct letters
         self.correct = [None, None, None, None, None]
+        # dictionnary of letters in word
         self.present = None
+        # Fill in the frequencies
         for w in self.words:
             self.freq.update(w)
+        # list of possible letters
         self.letters = [string.ascii_lowercase, string.ascii_lowercase,
                         string.ascii_lowercase, string.ascii_lowercase, string.ascii_lowercase]
 
@@ -85,13 +95,13 @@ class Wordle:
                     print('{} not in {}'.format(l, w))
         return keep
 
-    def next_guess(self, showall=False, show=2):
+    def next_guess(self, showall=False, show=1):
         """
         returns the best next guesses, sorted by their likelihood computed from the relative
         frequencies of their letters
 
         :param showall: bool: if True, returns all the matching words, defaulted to False
-        :param show: int: number of guesses to return. Defaulted to 2.
+        :param show: int: number of guesses to return. Defaulted to 1.
         :return: the guesses, from the least likely to the more likely
         """
         guess = []
