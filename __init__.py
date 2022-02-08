@@ -8,7 +8,7 @@ import wordle
 w = wordle.Wordle()
 w.next_guess()
 
-# play the propsed word and add the information:
+# play the proposed word and add the information:
 w.add_absent('ros')
 w.add_present('a', 0)
 w.add_present('e', 4)
